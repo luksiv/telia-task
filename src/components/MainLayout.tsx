@@ -1,32 +1,40 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import classnames from "classnames";
-
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
-
-const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+import { useAuthenticator } from "@aws-amplify/ui-react";
+import { navigationRoutes } from "../router/routes.config.tsx";
+import { Link, useLocation } from "react-router-dom";
 
 interface MainLayoutProps {
+  title: string;
   children: React.ReactNode;
 }
 
+const teliaLogoUrl =
+  "https://cdn.voca.teliacompany.com/logo/Telia-primary-default-v2.svg";
+
 export default function MainLayout(props: MainLayoutProps) {
+  const auth = useAuthenticator();
+  const location = useLocation();
+
+  const navigation = navigationRoutes.map((route) => {
+    return {
+      name: route.label,
+      to: route.path,
+      current: location.pathname === route.path,
+    };
+  });
+
+  const userNavigation = [
+    {
+      name: "Sign out",
+      onClick: () => {
+        auth.signOut();
+      },
+    },
+  ];
+
   return (
     <>
       <div className="min-h-full">
@@ -39,54 +47,39 @@ export default function MainLayout(props: MainLayoutProps) {
                     <div className="flex flex-shrink-0 items-center">
                       <img
                         className="block h-8 w-auto lg:hidden"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
+                        src={teliaLogoUrl}
                       />
                       <img
                         className="hidden h-8 w-auto lg:block"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
+                        src={teliaLogoUrl}
                       />
                     </div>
                     <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                       {navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
+                        <Link
+                          key={`desktop-${item.name}`}
+                          to={item.to}
                           className={classnames(
                             item.current
-                              ? "border-indigo-500 text-gray-900"
+                              ? "border-purple-500 text-gray-900"
                               : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                             "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium",
                           )}
                           aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
                   <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                    <button
-                      type="button"
-                      className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      <span className="absolute -inset-1.5" />
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-3">
                       <div>
-                        <Menu.Button className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <Menu.Button className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
                           <span className="absolute -inset-1.5" />
                           <span className="sr-only">Open user menu</span>
-                          <img
-                            className="h-8 w-8 rounded-full"
-                            src={user.imageUrl}
-                            alt=""
-                          />
+                          <UserIcon className="h-8 w-8 rounded-full" />
                         </Menu.Button>
                       </div>
                       <Transition
@@ -103,7 +96,8 @@ export default function MainLayout(props: MainLayoutProps) {
                             <Menu.Item key={item.name}>
                               {({ active }) => (
                                 <a
-                                  href={item.href}
+                                  key={item.name}
+                                  onClick={item.onClick}
                                   className={classnames(
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700",
@@ -120,7 +114,7 @@ export default function MainLayout(props: MainLayoutProps) {
                   </div>
                   <div className="-mr-2 flex items-center sm:hidden">
                     {/* Mobile menu button */}
-                    <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
                       <span className="absolute -inset-0.5" />
                       <span className="sr-only">Open main menu</span>
                       {open ? (
@@ -144,53 +138,30 @@ export default function MainLayout(props: MainLayoutProps) {
                   {navigation.map((item) => (
                     <Disclosure.Button
                       key={item.name}
-                      as="a"
-                      href={item.href}
                       className={classnames(
                         item.current
-                          ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                          ? "border-purple-500 bg-purple-50 text-purple-700"
                           : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
-                        "block border-l-4 py-2 pl-3 pr-4 text-base font-medium",
+                        "block border-l-4 py-2 pl-3 pr-4 text-base font-medium w-full text-left",
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >
-                      {item.name}
+                      <Link to={item.to}>{item.name}</Link>
                     </Disclosure.Button>
                   ))}
                 </div>
                 <div className="border-t border-gray-200 pb-3 pt-4">
                   <div className="flex items-center px-4">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
-                        alt=""
-                      />
+                    <div className="text-base font-medium text-gray-800">
+                      {auth.user?.username}
                     </div>
-                    <div className="ml-3">
-                      <div className="text-base font-medium text-gray-800">
-                        {user.name}
-                      </div>
-                      <div className="text-sm font-medium text-gray-500">
-                        {user.email}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      <span className="absolute -inset-1.5" />
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
                   </div>
                   <div className="mt-3 space-y-1">
                     {userNavigation.map((item) => (
                       <Disclosure.Button
                         key={item.name}
-                        as="a"
-                        href={item.href}
-                        className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                        onClick={item.onClick}
+                        className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 w-full text-left"
                       >
                         {item.name}
                       </Disclosure.Button>
@@ -206,12 +177,12 @@ export default function MainLayout(props: MainLayoutProps) {
           <header>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
-                Dashboard
+                {props.title}
               </h1>
             </div>
           </header>
           <main>
-            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="mt-4 mx-auto max-w-7xl sm:px-6 lg:px-8 ">
               {props.children}
             </div>
           </main>
