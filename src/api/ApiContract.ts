@@ -42,16 +42,21 @@ export namespace ApiContract {
       continent: EContinent;
       name: string;
       height: number;
+      pictureUrl: string;
     }
 
     export interface CreateMountainRequest {
       name: string;
       height: number;
+      continent: EContinent;
+      pictureUrl: string;
     }
 
     export interface UpdateMountainRequest {
       name?: string;
       height?: number;
+      continent?: EContinent;
+      pictureUrl?: string;
     }
 
     export interface GetMountainResponse extends Mountain {}

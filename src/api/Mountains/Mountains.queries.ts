@@ -26,10 +26,10 @@ export function useCreateMountain() {
     mutationFn: (data) => createMountain(data),
   });
 }
-export function useGetMountain(mountainId: string) {
+export function useGetMountain(mountainId?: string) {
   return useQuery<ApiContract.MountainsApiContract.GetMountainResponse>({
     queryKey: ["getMountain", mountainId],
-    queryFn: () => getMountain(mountainId),
+    queryFn: () => getMountain(mountainId ?? ""),
     enabled: !!mountainId,
   });
 }

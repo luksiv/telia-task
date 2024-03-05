@@ -1,4 +1,4 @@
 export const getBaseApiUrl = () => {
   // TODO: change this
-  return "https://api.example.com";
+  return "http://api.domain.com";
 };

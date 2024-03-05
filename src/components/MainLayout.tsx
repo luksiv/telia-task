@@ -8,7 +8,12 @@ import { Link, useLocation } from "react-router-dom";
 
 interface MainLayoutProps {
   title: string;
+  headerButton?: {
+    label: string;
+    linkTo: string;
+  };
   children: React.ReactNode;
+  isLoading?: boolean;
 }
 
 const teliaLogoUrl =
@@ -175,15 +180,23 @@ export default function MainLayout(props: MainLayoutProps) {
 
         <div className="py-10">
           <header>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8  flex justify-between">
               <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
                 {props.title}
               </h1>
+              {props.headerButton && (
+                <Link
+                  to={props.headerButton.linkTo}
+                  className="ml-3 inline-flex items-center rounded-md bg-purple-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500"
+                >
+                  {props.headerButton.label}
+                </Link>
+              )}
             </div>
           </header>
           <main>
-            <div className="mt-4 mx-auto max-w-7xl sm:px-6 lg:px-8 ">
-              {props.children}
+            <div className="mt-4 mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-col gap-4">
+              {props.isLoading ? <span>Loading</span> : props.children}
             </div>
           </main>
         </div>

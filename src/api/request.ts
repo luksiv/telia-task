@@ -1,7 +1,7 @@
 import { getBaseApiUrl } from "./getBaseApiUrl.ts";
 
 export interface FetchSettings {
-  url: string;
+  path: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: Record<string, any>;
   data?: unknown;
@@ -16,7 +16,7 @@ async function fetchApi<T>(
   fetchSettings: FetchSettings,
 ): Promise<T> {
   try {
-    const url = new URL(fetchSettings.url, getBaseApiUrl());
+    const url = `${getBaseApiUrl()}${fetchSettings.path}`;
     const searchParams = new URLSearchParams(
       fetchSettings.params ?? {},
     ).toString();
@@ -43,17 +43,17 @@ async function fetchApi<T>(
 
 export const request = {
   get: <T>(url: string, settings?: Partial<FetchSettings>) =>
-    fetchApi<T>("GET", { url, ...settings }),
+    fetchApi<T>("GET", { path: url, ...settings }),
   post: <T>(
     url: string,
     data: unknown,
     settings?: Omit<Partial<FetchSettings>, "data">,
-  ) => fetchApi<T>("POST", { url, data, ...settings }),
+  ) => fetchApi<T>("POST", { path: url, data, ...settings }),
   patch: <T>(
     url: string,
     data: unknown,
     settings?: Omit<Partial<FetchSettings>, "data">,
-  ) => fetchApi<T>("PATCH", { url, data, ...settings }),
+  ) => fetchApi<T>("PATCH", { path: url, data, ...settings }),
   delete: <T>(url: string, settings?: Partial<FetchSettings>) =>
-    fetchApi<T>("DELETE", { url, ...settings }),
+    fetchApi<T>("DELETE", { path: url, ...settings }),
 };
