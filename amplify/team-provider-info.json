@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-teliafrontend-dev-191333-authRole",
+      "UnauthRoleArn": "arn:aws:iam::654654626446:role/amplify-teliafrontend-dev-191333-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::654654626446:role/amplify-teliafrontend-dev-191333-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-teliafrontend-dev-191333-deployment",
+      "UnauthRoleName": "amplify-teliafrontend-dev-191333-unauthRole",
+      "StackName": "amplify-teliafrontend-dev-191333",
+      "StackId": "arn:aws:cloudformation:eu-north-1:654654626446:stack/amplify-teliafrontend-dev-191333/b3908ac0-db13-11ee-8079-060683f9d6bd",
+      "AmplifyAppId": "dmjy2h2zqsfko"
+    },
+    "categories": {
+      "auth": {
+        "teliafrontend19780ed4": {}
+      }
+    }
+  }
+}
