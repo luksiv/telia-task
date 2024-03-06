@@ -3,6 +3,8 @@ import HomePage from "../pages/HomePage/HomePage.tsx";
 import MountainsListPage from "../pages/MountainsListPage/MountainsListPage.tsx";
 import MountainsFormPage from "../pages/MountainsFormPage/MountainsFormPage.tsx";
 import MountainsDetailsPage from "../pages/MountainsDetailsPage/MountainsDetailsPage.tsx";
+import ArchitecturePage from "../pages/ArchitecturePage/ArchitecturePage.tsx";
+import RequirementsPage from "../pages/RequirementsPage/RequirementsPage.tsx";
 
 export const ROUTE_PATHS = {
   home: "/",
@@ -10,6 +12,8 @@ export const ROUTE_PATHS = {
   mountainsCreate: "/mountains/create",
   mountainsDetails: "/mountains/:mountainId",
   mountainsEdit: "/mountains/:mountainId/edit",
+  architecture: "/architecture",
+  requirements: "/requirements",
 } as const;
 
 export const routesConfig: RouteInfo[] = [
@@ -23,6 +27,18 @@ export const routesConfig: RouteInfo[] = [
     path: ROUTE_PATHS.mountainsList,
     label: "Mountains",
     element: <MountainsListPage />,
+    showInNavigation: true,
+  },
+  {
+    path: ROUTE_PATHS.architecture,
+    label: "Architecture",
+    element: <ArchitecturePage />,
+    showInNavigation: true,
+  },
+  {
+    path: ROUTE_PATHS.requirements,
+    label: "Requirements",
+    element: <RequirementsPage />,
     showInNavigation: true,
   },
   {

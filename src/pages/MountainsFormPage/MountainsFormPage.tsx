@@ -14,6 +14,7 @@ import { ROUTE_PATHS } from "../../router/routes.config.tsx";
 import { enqueueSnackbar } from "notistack";
 import { generatePath } from "react-router";
 import { useEffect } from "react";
+import { HttpError } from "../../api/HttpError.ts";
 import EContinent = ApiContract.MountainsApiContract.EContinent;
 
 interface MountainFormData {
@@ -39,8 +40,18 @@ export default function MountainsFormPage() {
 
   const isEditing = !!mountainId;
 
-  const { data: mountainData, isLoading: isMountainLoading } =
-    useGetMountain(mountainId);
+  const {
+    data: mountainData,
+    isLoading: isMountainLoading,
+    error: mountainError,
+  } = useGetMountain(mountainId);
+
+  useEffect(() => {
+    if (mountainError instanceof HttpError && mountainError.code === 404) {
+      enqueueSnackbar("Mountain not found", { variant: "error" });
+      navigate(ROUTE_PATHS.mountainsList);
+    }
+  }, [mountainError, navigate]);
 
   const form = useForm<MountainFormData>({
     // @ts-expect-error -- some issue with react-hook-form types

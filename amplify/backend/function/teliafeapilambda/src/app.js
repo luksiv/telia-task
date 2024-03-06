@@ -67,7 +67,12 @@ const mapDynamoItemToReturnDto = (item) => {
     continent: item.continent,
     height: item.height,
     pictureUrl: item.pictureUrl,
+    createdBy: item.createdBy || "NO_DATA",
   };
+};
+
+const getCallerIdentity = (req) => {
+  return req.apiGateway.event.requestContext.identity.cognitoIdentityId;
 };
 
 /************************************
@@ -75,9 +80,15 @@ const mapDynamoItemToReturnDto = (item) => {
  ************************************/
 
 app.get(path, async function (req, res) {
+  const callerIdentity = getCallerIdentity(req);
+
   var params = {
     TableName: tableName,
     Select: "ALL_ATTRIBUTES",
+    ExpressionAttributeValues: {
+      ":createdBy": callerIdentity,
+    },
+    FilterExpression: "createdBy = :createdBy",
   };
 
   try {
@@ -134,6 +145,13 @@ app.get(
 
     try {
       const data = await ddbDocClient.send(new GetCommand(getItemParams));
+
+      if (data.Item.createdBy !== getCallerIdentity(req)) {
+        res.statusCode = 404;
+        res.json({ error: "Forbidden" });
+        return;
+      }
+
       if (data.Item) {
         res.json(mapDynamoItemToReturnDto(data.Item));
       } else {
@@ -181,7 +199,7 @@ app.post(path, async function (req, res) {
 
   let putItemParams = {
     TableName: tableName,
-    Item: { ...req.body, id: uuid.v4() },
+    Item: { ...req.body, id: uuid.v4(), createdBy: getCallerIdentity(req) },
   };
   try {
     await ddbDocClient.send(new PutCommand(putItemParams));

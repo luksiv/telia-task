@@ -22,7 +22,7 @@ export default function MountainsListPage() {
       ]}
     >
       {mountains.isLoading && <EmptyLoadingState />}
-      {!mountains.isLoading && !mountains.data && (
+      {!mountains.isLoading && !hasData && (
         <EmptyStateView
           message={"No mountains found"}
           subtitle={"Create a new mountain to get started"}

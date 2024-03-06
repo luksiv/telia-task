@@ -7,6 +7,8 @@ import {
 import { ROUTE_PATHS } from "../../router/routes.config.tsx";
 import { generatePath } from "react-router";
 import { enqueueSnackbar } from "notistack";
+import { useEffect } from "react";
+import { HttpError } from "../../api/HttpError.ts";
 
 export default function MountainsDetailsPage() {
   const navigate = useNavigate();
@@ -17,8 +19,18 @@ export default function MountainsDetailsPage() {
     navigate(ROUTE_PATHS.mountainsList);
   }
 
-  const { data: mountainData, isLoading: isMountainLoading } =
-    useGetMountain(mountainId);
+  const {
+    data: mountainData,
+    isLoading: isMountainLoading,
+    error: mountainError,
+  } = useGetMountain(mountainId);
+
+  useEffect(() => {
+    if (mountainError instanceof HttpError && mountainError.code === 404) {
+      enqueueSnackbar("Mountain not found", { variant: "error" });
+      navigate(ROUTE_PATHS.mountainsList);
+    }
+  }, [mountainError, navigate]);
 
   const deleteMutation = useDeleteMountain();
 
