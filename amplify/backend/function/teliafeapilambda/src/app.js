@@ -176,7 +176,11 @@ app.put(path, async function (req, res) {
 
   let putItemParams = {
     TableName: tableName,
-    Item: req.body,
+    Item: {
+      ...req.body,
+      id: req.body.id,
+      createdBy: getCallerIdentity(req),
+    },
   };
   try {
     await ddbDocClient.send(new PutCommand(putItemParams));

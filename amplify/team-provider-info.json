@@ -22,7 +22,7 @@
       "function": {
         "teliafeapilambda": {
           "deploymentBucketName": "amplify-teliafrontend-dev-191333-deployment",
-          "s3Key": "amplify-builds/teliafeapilambda-2b4d57752f5479617154-build.zip"
+          "s3Key": "amplify-builds/teliafeapilambda-6237346c7144316c554b-build.zip"
         }
       },
       "api": {
