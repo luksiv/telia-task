@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/mountains": {
+      "name": "/mountains",
+      "lambdaFunction": "teliafeapilambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

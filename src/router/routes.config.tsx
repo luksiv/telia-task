@@ -2,11 +2,13 @@ import { RouteInfo } from "./RouteInfo.type.ts";
 import HomePage from "../pages/HomePage/HomePage.tsx";
 import MountainsListPage from "../pages/MountainsListPage/MountainsListPage.tsx";
 import MountainsFormPage from "../pages/MountainsFormPage/MountainsFormPage.tsx";
+import MountainsDetailsPage from "../pages/MountainsDetailsPage/MountainsDetailsPage.tsx";
 
 export const ROUTE_PATHS = {
   home: "/",
   mountainsList: "/mountains",
   mountainsCreate: "/mountains/create",
+  mountainsDetails: "/mountains/:mountainId",
   mountainsEdit: "/mountains/:mountainId/edit",
 } as const;
 
@@ -22,6 +24,10 @@ export const routesConfig: RouteInfo[] = [
     label: "Mountains",
     element: <MountainsListPage />,
     showInNavigation: true,
+  },
+  {
+    path: ROUTE_PATHS.mountainsDetails,
+    element: <MountainsDetailsPage />,
   },
   {
     path: ROUTE_PATHS.mountainsCreate,

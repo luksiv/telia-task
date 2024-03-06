@@ -1,4 +1,20 @@
 {
+  "api": {
+    "teliafeapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "teliafeapilambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "teliafrontend19780ed4": {
       "customAuth": false,
@@ -23,6 +39,51 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "teliafeapilambda": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "teliafeapistorage"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_teliafeapilambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "teliafeapilambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_teliafeapilambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "teliafeapilambda"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "teliafeapistorage": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

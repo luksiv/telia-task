@@ -26,7 +26,10 @@ interface MountainFormData {
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   continent: yup.string().required("Continent is required"),
-  height: yup.string().required("Height is required"),
+  height: yup
+    .string()
+    .required("Height is required")
+    .matches(/^\d+$/, "Height must be a number"),
   pictureUrl: yup.string().required("Picture is required").url("Invalid URL"),
 });
 
@@ -68,17 +71,20 @@ export default function MountainsFormPage() {
     if (isEditing) {
       patchMutation.mutate(
         {
-          mountainId: mountainId!,
-          data: {
-            name: data.name,
-            height: data.height ? +data.height : undefined,
-            continent: data.continent,
-            pictureUrl: data.pictureUrl,
-          },
+          id: mountainId,
+          name: data.name,
+          height: +data.height,
+          continent: data.continent,
+          pictureUrl: data.pictureUrl,
         },
         {
           onSuccess: () => {
             enqueueSnackbar("Mountain updated", { variant: "success" });
+            navigate(
+              generatePath(ROUTE_PATHS.mountainsDetails, {
+                mountainId,
+              }),
+            );
           },
           onError: () => {
             enqueueSnackbar("Failed to update mountain", { variant: "error" });
@@ -97,7 +103,7 @@ export default function MountainsFormPage() {
           onSuccess: (result) => {
             enqueueSnackbar("Mountain created", { variant: "success" });
             navigate(
-              generatePath(ROUTE_PATHS.mountainsEdit, {
+              generatePath(ROUTE_PATHS.mountainsDetails, {
                 mountainId: result.id,
               }),
             );
@@ -114,8 +120,12 @@ export default function MountainsFormPage() {
 
   return (
     <MainLayout
-      title={isEditing ? `Mountain ${mountainId}` : "Add Mountain"}
-      isLoading={isEditing && isMountainLoading}
+      title={isEditing ? `Edit mountain` : "Add mountain"}
+      isLoading={
+        createMutation.isPending ||
+        patchMutation.isPending ||
+        (isEditing && isMountainLoading)
+      }
     >
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

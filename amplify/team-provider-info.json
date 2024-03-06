@@ -9,11 +9,24 @@
       "UnauthRoleName": "amplify-teliafrontend-dev-191333-unauthRole",
       "StackName": "amplify-teliafrontend-dev-191333",
       "StackId": "arn:aws:cloudformation:eu-north-1:654654626446:stack/amplify-teliafrontend-dev-191333/b3908ac0-db13-11ee-8079-060683f9d6bd",
-      "AmplifyAppId": "dmjy2h2zqsfko"
+      "AmplifyAppId": "dmjy2h2zqsfko",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-teliafrontend-dev-191333-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "teliafrontend19780ed4": {}
+      },
+      "storage": {
+        "teliafeapistorage": {}
+      },
+      "function": {
+        "teliafeapilambda": {
+          "deploymentBucketName": "amplify-teliafrontend-dev-191333-deployment",
+          "s3Key": "amplify-builds/teliafeapilambda-52773372366d47615564-build.zip"
+        }
+      },
+      "api": {
+        "teliafeapi": {}
       }
     }
   }

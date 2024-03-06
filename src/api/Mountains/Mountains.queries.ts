@@ -9,17 +9,15 @@ import { ApiContract } from "../ApiContract.ts";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ErrorResponse } from "../request.ts";
 
-export function useGetAllMountains(
-  params: Partial<ApiContract.MountainsApiContract.GetAllMountainsRequest> = {},
-) {
+export function useGetAllMountains() {
   return useQuery<ApiContract.MountainsApiContract.GetAllMountainsResponse>({
-    queryKey: ["getAllMountains", params],
-    queryFn: () => getAllMountains(params),
+    queryKey: ["getAllMountains"],
+    queryFn: () => getAllMountains(),
   });
 }
 export function useCreateMountain() {
   return useMutation<
-    ApiContract.MountainsApiContract.GetMountainResponse,
+    ApiContract.MountainsApiContract.CreateMountainResponse,
     ErrorResponse,
     ApiContract.MountainsApiContract.CreateMountainRequest
   >({
@@ -35,18 +33,15 @@ export function useGetMountain(mountainId?: string) {
 }
 export function usePatchMountain() {
   return useMutation<
-    ApiContract.MountainsApiContract.GetMountainResponse,
+    ApiContract.MountainsApiContract.UpdateMountainResponse,
     ErrorResponse,
-    {
-      mountainId: string;
-      data: ApiContract.MountainsApiContract.UpdateMountainRequest;
-    }
+    ApiContract.MountainsApiContract.UpdateMountainRequest
   >({
-    mutationFn: ({ mountainId, data }) => patchMountain(mountainId, data),
+    mutationFn: (data) => patchMountain(data),
   });
 }
 export function useDeleteMountain() {
-  return useMutation<void, ErrorResponse, string>({
+  return useMutation<unknown, ErrorResponse, string>({
     mutationFn: (mountainId) => deleteMountain(mountainId),
   });
 }

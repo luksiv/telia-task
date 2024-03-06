@@ -1,0 +1,10 @@
+{
+  "resourceName": "teliafeapistorage",
+  "tableName": "mountains",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

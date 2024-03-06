@@ -1,30 +1,12 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace ApiContract {
-  export namespace CommonContract {
-    export interface PaginatedRequest {
-      offset?: number;
-      limit?: number;
-    }
-
-    export interface PaginatedMetadata {
-      total: number;
-      page: number;
-      pageSize: number;
-    }
-
-    export interface PaginatedResponse<T> {
-      data: T[];
-      metadata: PaginatedMetadata;
-    }
-  }
-
   export namespace MountainsApiContract {
     export const Paths = {
       getAllMountains: "/mountains",
       createMountain: "/mountains",
-      getMountain: (mountainId: string) => `/mountains/${mountainId}/edit`,
-      patchMountain: (mountainId: string) => `/mountains/${mountainId}/edit`,
-      deleteMountain: (mountainId: string) => `/mountains/${mountainId}/edit`,
+      getMountain: (mountainId: string) => `/mountains/object/${mountainId}`,
+      patchMountain: (mountainId: string) => `/mountains/object/${mountainId}`,
+      deleteMountain: (mountainId: string) => `/mountains/object/${mountainId}`,
     };
 
     export enum EContinent {
@@ -45,27 +27,20 @@ export namespace ApiContract {
       pictureUrl: string;
     }
 
-    export interface CreateMountainRequest {
-      name: string;
-      height: number;
-      continent: EContinent;
-      pictureUrl: string;
-    }
+    export interface CreateMountainRequest
+      extends Omit<ApiContract.MountainsApiContract.Mountain, "id"> {}
 
-    export interface UpdateMountainRequest {
-      name?: string;
-      height?: number;
-      continent?: EContinent;
-      pictureUrl?: string;
-    }
+    export interface CreateMountainResponse extends Pick<Mountain, "id"> {}
+
+    export interface UpdateMountainRequest
+      extends ApiContract.MountainsApiContract.Mountain {}
+
+    export interface UpdateMountainResponse extends Pick<Mountain, "id"> {}
 
     export interface GetMountainResponse extends Mountain {}
 
-    export interface GetAllMountainsRequest
-      extends CommonContract.PaginatedRequest {
-      continent?: EContinent;
+    export interface GetAllMountainsResponse {
+      items: Mountain[];
     }
-    export interface GetAllMountainsResponse
-      extends CommonContract.PaginatedResponse<Mountain> {}
   }
 }

@@ -1,39 +1,62 @@
 import { ApiContract } from "../ApiContract.ts";
-import { request } from "../request.ts";
+import * as API from "@aws-amplify/api";
 
-export const getAllMountains = (
-  params: Partial<ApiContract.MountainsApiContract.GetAllMountainsRequest>,
-) =>
-  request.get<ApiContract.MountainsApiContract.GetAllMountainsResponse>(
-    ApiContract.MountainsApiContract.Paths.getAllMountains,
-    {
-      params,
-    },
-  );
+export const getAllMountains = async () => {
+  const response = await API.get({
+    apiName: "teliafeapi",
+    path: ApiContract.MountainsApiContract.Paths.getAllMountains,
+  }).response;
 
-export const createMountain = (
+  const responseBody: unknown = await response.body.json();
+  return responseBody as ApiContract.MountainsApiContract.GetAllMountainsResponse;
+};
+
+export const createMountain = async (
   data: ApiContract.MountainsApiContract.CreateMountainRequest,
-) =>
-  request.post<ApiContract.MountainsApiContract.GetMountainResponse>(
-    ApiContract.MountainsApiContract.Paths.createMountain,
-    data,
-  );
+) => {
+  const response = await API.post({
+    apiName: "teliafeapi",
+    path: ApiContract.MountainsApiContract.Paths.getAllMountains,
+    options: {
+      body: data,
+    },
+  }).response;
 
-export const getMountain = (mountainId: string) =>
-  request.get<ApiContract.MountainsApiContract.GetMountainResponse>(
-    ApiContract.MountainsApiContract.Paths.getMountain(mountainId),
-  );
+  const responseBody: unknown = await response.body.json();
+  return responseBody as ApiContract.MountainsApiContract.CreateMountainResponse;
+};
 
-export const patchMountain = (
-  mountainId: string,
+export const getMountain = async (mountainId: string) => {
+  const response = await API.get({
+    apiName: "teliafeapi",
+    path: ApiContract.MountainsApiContract.Paths.getMountain(mountainId),
+    options: {},
+  }).response;
+
+  const responseBody: unknown = await response.body.json();
+  return responseBody as ApiContract.MountainsApiContract.GetMountainResponse;
+};
+
+export const patchMountain = async (
   data: ApiContract.MountainsApiContract.UpdateMountainRequest,
-) =>
-  request.patch<ApiContract.MountainsApiContract.GetMountainResponse>(
-    ApiContract.MountainsApiContract.Paths.patchMountain(mountainId),
-    data,
-  );
+) => {
+  const response = await API.put({
+    apiName: "teliafeapi",
+    path: ApiContract.MountainsApiContract.Paths.getAllMountains,
+    options: {
+      // @ts-expect-error -- some issue with the API type
+      body: data,
+    },
+  }).response;
 
-export const deleteMountain = (mountainId: string) =>
-  request.delete<void>(
-    ApiContract.MountainsApiContract.Paths.deleteMountain(mountainId),
-  );
+  const responseBody: unknown = await response.body.json();
+  return responseBody as ApiContract.MountainsApiContract.UpdateMountainResponse;
+};
+
+export const deleteMountain = async (mountainId: string) => {
+  return API.del({
+    apiName: "teliafeapi",
+    path: ApiContract.MountainsApiContract.Paths.deleteMountain(mountainId),
+    options: {},
+  });
+};

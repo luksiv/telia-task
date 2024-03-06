@@ -5,13 +5,12 @@ import classnames from "classnames";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { navigationRoutes } from "../router/routes.config.tsx";
 import { Link, useLocation } from "react-router-dom";
+import LoadingWrapper from "./LoadingWrapper.tsx";
+import ButtonsList, { ButtonProps } from "./ButtonsList.tsx";
 
 interface MainLayoutProps {
   title: string;
-  headerButton?: {
-    label: string;
-    linkTo: string;
-  };
+  buttons?: ButtonProps[];
   children: React.ReactNode;
   isLoading?: boolean;
 }
@@ -184,19 +183,14 @@ export default function MainLayout(props: MainLayoutProps) {
               <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
                 {props.title}
               </h1>
-              {props.headerButton && (
-                <Link
-                  to={props.headerButton.linkTo}
-                  className="ml-3 inline-flex items-center rounded-md bg-purple-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500"
-                >
-                  {props.headerButton.label}
-                </Link>
-              )}
+              {props.buttons && <ButtonsList buttons={props.buttons} />}
             </div>
           </header>
           <main>
-            <div className="mt-10 mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-col gap-4">
-              {props.isLoading ? <span>Loading</span> : props.children}
+            <div className="mt-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
+              <LoadingWrapper isLoading={props.isLoading ?? false}>
+                {props.children}
+              </LoadingWrapper>
             </div>
           </main>
         </div>
