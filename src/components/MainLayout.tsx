@@ -195,7 +195,7 @@ export default function MainLayout(props: MainLayoutProps) {
             </div>
           </header>
           <main>
-            <div className="mt-4 mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-col gap-4">
+            <div className="mt-10 mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-col gap-4">
               {props.isLoading ? <span>Loading</span> : props.children}
             </div>
           </main>
